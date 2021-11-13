@@ -30,17 +30,17 @@ func (Player) Fields() []ent.Field {
 }
 ```
 
-Let alone to have `Fields` is good, so next step of using `Ent` lib, would be to generate `Ent` files called `Ent`'s templates. they will be based on our defined schemas. To do so, we need first to install codegen tool (if you have already have it):
+Let alone to have `Fields` is good, so next step of using `Ent` lib, would be to generate `Ent` files called `Ent`'s templates. They will be based on our defined schemas. To do so, we need first to install codegen tool (if you haven't got it already):
 ```bash
 go get entgo.io/ent/cmd/ent
 ```
 
-after you got a tool, time to generate you first template:
+After you got a tool, time to generate you first template:
 ```bash
 go run entgo.io/ent/cmd/ent init Player
 ```
 
-the `init` command will create a folder `ent` which will contain:
+The `init` command will create a folder `ent` which will contain:
 ```
 ./ent
     schema/
@@ -48,6 +48,6 @@ the `init` command will create a folder `ent` which will contain:
     generate.go
 ```
 
-those files should be kept without manual editing and every time you change something in your entities and you got an uprade of Ent, you will invoke `init` to overwrite those files ones more.
+Those files should be kept without manual editing and every time you change something in your entities and you got an uprade of Ent, you will invoke `init` to overwrite those files ones more.
 
 Tsyren Ochirov (c) 2021
