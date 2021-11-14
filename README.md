@@ -71,4 +71,39 @@ Player:
 
 We can remove `./player.go` file, as it is not gonna be needed anymore. From now on, you will edit your models in `./ent/schema` folder.
 
+Now, you migth wonder how do we call SQL queries. To do that, you would need to generate your SQL interfaces for your schema. Invoke the following:
+
+Full version:
+```bash
+go run entgo.io/ent/cmd/ent generate ./ent/schema
+```
+
+Short version:
+```
+go generate ./ent
+```
+
+Inspect results in `./ent`. Previously, we had there our schame file. Now, there are bunch of files, do not edit them yet. Let's understand their purpose by using it.
+let's pick our `Postgres` as our RDMS engine. Steps are:
+
+Spin up `Postgres` server in docker:
+```bash
+docker run -it --rm --name dev-postgres -e POSTGRES_DB=entgo_example -e POSTGRES_PASSWORD=topsecret -p 5432:5432 postgres
+```
+
+our connection setttings:
+```
+Host: localhost
+Port: 5432
+User: postgres
+Password: topsecret
+Database: entgo_example
+```
+
+Code to connect to our db:
+```go
+sql.Open("postgres", "user=postgres password=topsecret dbname=entgo_example sslmode=disable")
+```
+
+
 Tsyren Ochirov (c) 2021
