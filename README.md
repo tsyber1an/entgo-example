@@ -12,6 +12,9 @@ type Player struct {
 to turn `Player` mode into an `Ent`'s entity, it is just enought embed `ent.Schema`, so it becomes:
 
 ```go
+import (
+	"entgo.io/ent" // ent lib
+)
 type Player struct {
     ent.Schema
 }
@@ -21,6 +24,10 @@ After we have scheme embed, we will need to define our schema parts such as `Fie
 Let's add some fields to our `Player` entity, e.g. `nickname`, `email` and `scores`:
 
 ```go
+import (
+	"entgo.io/ent/schema/field" // ent.Field struct
+)
+
 func (Player) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("nickname"),
@@ -102,12 +109,21 @@ Database: entgo_example
 
 Instead of using `database/sql` connect to our db:
 ```go
-sql.Open("postgres", "user=postgres password=topsecret dbname=entgo_example sslmode=disable")
+import (
+	_ "github.com/lib/pq" // indirect import
+)
+
+db, err := sql.Open("postgres", "user=postgres password=topsecret dbname=entgo_example sslmode=disable")
 ```
 
 `Ent` provides out of box solution with the same interface:
 ```go
-ent.Open("postgres", "user=postgres password=topsecret dbname=entgo_example sslmode=disable")
+import (
+	"github.com/Funfun/entgo-example/ent"
+	_ "github.com/lib/pq" // pq import should here remain anyways
+)
+
+client, err := ent.Open("postgres", "user=postgres password=topsecret dbname=entgo_example sslmode=disable")
 ```
 
 At this moment, we will be ready to use our database, but before we create our first `Player` record, let's have a look into our SQL schema with again, built-in `Ent` tool fot it:
@@ -176,6 +192,10 @@ entgo_example=# SELECT * FROM players;
 let's verify it using `Ent` query interface:
 
 ```go
+import (
+	playerEnt "github.com/Funfun/entgo-example/ent/player"
+)
+
 player, err = client.Player.Query().Where(playerEnt.Nickname("John")).Only(ctx)
 if err != nil {
 	log.Fatalln(err)
