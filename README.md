@@ -30,7 +30,8 @@ func (Player) Fields() []ent.Field {
 }
 ```
 
-Let alone to have `Fields` is good, so next step of using `Ent` lib, would be to generate `Ent` files called `Ent`'s templates. They will be based on our defined schemas. To do so, we need first to install codegen tool (if you haven't got it already):
+In official introduction of Entgo, it says to init model by running codegeltool. Go ahead and install it first:
+
 ```bash
 go get entgo.io/ent/cmd/ent
 ```
@@ -48,6 +49,26 @@ The `init` command will create a folder `ent` which will contain:
     generate.go
 ```
 
-Those files should be kept without manual editing and every time you change something in your entities and you got an uprade of Ent, you will invoke `init` to overwrite those files ones more.
+You will find it has the same structure as we describe in the beginning, plus an aadditional method:
+```
+func (Player) Edges() []ent.Edge {
+	return nil
+}
+```
+
+Now, you can copy your `Field()` method into `./ent/schema/player.go`. To verify that you did all right, run `describe` command, you should get something like bellow:
+```
+➜  entgo-example git:(main) go run entgo.io/ent/cmd/ent describe ./ent/schema
+Player:
+        +----------+--------+--------+----------+----------+---------+---------------+-----------+---------------------------+------------+
+        |  Field   |  Type  | Unique | Optional | Nillable | Default | UpdateDefault | Immutable |         StructTag         | Validators |
+        +----------+--------+--------+----------+----------+---------+---------------+-----------+---------------------------+------------+
+        | id       | int    | false  | false    | false    | false   | false         | false     | json:"id,omitempty"       |          0 |
+        | nickname | string | false  | false    | false    | false   | false         | false     | json:"nickname,omitempty" |          0 |
+        | email    | string | false  | false    | false    | false   | false         | false     | json:"email,omitempty"    |          0 |
+        | scores   | int    | false  | false    | false    | false   | false         | false     | json:"scores,omitempty"   |          0 |
+```
+
+We can remove `./player.go` file, as it is not gonna be needed anymore. From now on, you will edit your models in `./ent/schema` folder.
 
 Tsyren Ochirov (c) 2021
