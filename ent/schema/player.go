@@ -1,6 +1,9 @@
 package schema
 
-import "entgo.io/ent"
+import (
+	"entgo.io/ent"
+	"entgo.io/ent/schema/field"
+)
 
 // Player holds the schema definition for the Player entity.
 type Player struct {
@@ -9,7 +12,11 @@ type Player struct {
 
 // Fields of the Player.
 func (Player) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.String("nickname"),
+		field.String("email"),
+		field.Int("scores"),
+	}
 }
 
 // Edges of the Player.
