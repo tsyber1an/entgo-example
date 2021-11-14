@@ -8,6 +8,38 @@ import (
 )
 
 var (
+	// BooksColumns holds the columns for the "books" table.
+	BooksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "title", Type: field.TypeString, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "person_books", Type: field.TypeInt, Nullable: true},
+	}
+	// BooksTable holds the schema information for the "books" table.
+	BooksTable = &schema.Table{
+		Name:       "books",
+		Columns:    BooksColumns,
+		PrimaryKey: []*schema.Column{BooksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "books_persons_books",
+				Columns:    []*schema.Column{BooksColumns[3]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// PersonsColumns holds the columns for the "persons" table.
+	PersonsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+	}
+	// PersonsTable holds the schema information for the "persons" table.
+	PersonsTable = &schema.Table{
+		Name:       "persons",
+		Columns:    PersonsColumns,
+		PrimaryKey: []*schema.Column{PersonsColumns[0]},
+	}
 	// PlayersColumns holds the columns for the "players" table.
 	PlayersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -23,9 +55,12 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		BooksTable,
+		PersonsTable,
 		PlayersTable,
 	}
 )
 
 func init() {
+	BooksTable.ForeignKeys[0].RefTable = PersonsTable
 }

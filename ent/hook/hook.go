@@ -9,6 +9,32 @@ import (
 	"github.com/Funfun/entgo-example/ent"
 )
 
+// The BookFunc type is an adapter to allow the use of ordinary
+// function as Book mutator.
+type BookFunc func(context.Context, *ent.BookMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BookFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.BookMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BookMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The PersonFunc type is an adapter to allow the use of ordinary
+// function as Person mutator.
+type PersonFunc func(context.Context, *ent.PersonMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PersonFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.PersonMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The PlayerFunc type is an adapter to allow the use of ordinary
 // function as Player mutator.
 type PlayerFunc func(context.Context, *ent.PlayerMutation) (ent.Value, error)

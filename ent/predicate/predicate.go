@@ -6,5 +6,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Book is the predicate function for book builders.
+type Book func(*sql.Selector)
+
+// Person is the predicate function for person builders.
+type Person func(*sql.Selector)
+
 // Player is the predicate function for player builders.
 type Player func(*sql.Selector)

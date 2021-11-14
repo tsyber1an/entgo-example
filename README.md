@@ -227,4 +227,63 @@ and can be defined as below:
 |               | User `edge.To("cars", Car.Type), edge.From("groups", Group.Type).Ref("users")` |
 
 
+Example for create:
+
+```go
+// Edges of the Book.
+func (Book) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("author", Person.Type).Ref("books").Unique(),
+	}
+}
+```
+
+```go
+// Edges of the Person.
+func (Person) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("books", Book.Type),
+	}
+}
+```
+
+create person:
+```go
+leo, err := client.Person.Create().SetName("Leo Tolstoy").Save(ctx)
+if err != nil {
+	log.Fatalln(err)
+}
+// SQL: INSERT INTO "persons" ("name") VALUES ($1) RETURNING "id" args=[Leo Tolstoy]
+```
+create book:
+```go
+publishedAt, _ := time.Parse(time.RFC3339, "1869-01-01T15:04:06Z07:00")
+warAndPeace, err := client.Book.Create().SetTitle("War and Peace").SetAuthor(leo).SetCreatedAt(publishedAt).Save(ctx)
+if err != nil {
+	log.Fatalln(err)
+}
+// INSERT INTO "books" ("title", "created_at", "person_books") VALUES ($1, $2, $3) RETURNING "id" args=[War and Peace 0001-01-01 00:00:00 +0000 UTC 5]
+```
+
+note that column that desribes book's author is called `person_books` which might not be really semantically readable for debugging.
+
+Query example:
+
+we query over `Book` with Where 
+```go
+res, err := client.Book.Query().Where(book.Title("War and Peace")).Only(ctx)
+// SQL: SELECT DISTINCT "books"."id", "books"."title", "books"."created_at" FROM "books" WHERE "books"."title" = $1 LIMIT 2 args=[War and Peace]
+// it returns:
+// => Book(id=4, title=War and Peace, created_at=Mon Jan  1 00:00:00 0001)
+```
+
+however, if we set to query Author, in the same query, it will result in instance of type `Author`:
+
+```go
+author, err := client.Book.Query().Where(book.Title("War and Peace")).QueryAuthor().Only(ctx)
+// SQL: SELECT DISTINCT "persons"."id", "persons"."name" FROM "persons" JOIN (SELECT "books"."person_books" FROM "books" WHERE "books"."title" = $1) AS "t1" ON "persons"."id" = "t1"."person_books" LIMIT 2 args=[War and Peace]
+// returns:
+// => Person(id=5, name=Leo Tolstoy)
+```
+
 Tsyren Ochirov (c) 2021
