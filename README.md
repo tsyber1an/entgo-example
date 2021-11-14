@@ -269,7 +269,7 @@ note that column that desribes book's author is called `person_books` which migh
 
 Query example:
 
-we query over `Book` with Where 
+we query over `Book` with Where
 ```go
 res, err := client.Book.Query().Where(book.Title("War and Peace")).Only(ctx)
 // SQL: SELECT DISTINCT "books"."id", "books"."title", "books"."created_at" FROM "books" WHERE "books"."title" = $1 LIMIT 2 args=[War and Peace]
@@ -284,6 +284,23 @@ author, err := client.Book.Query().Where(book.Title("War and Peace")).QueryAutho
 // SQL: SELECT DISTINCT "persons"."id", "persons"."name" FROM "persons" JOIN (SELECT "books"."person_books" FROM "books" WHERE "books"."title" = $1) AS "t1" ON "persons"."id" = "t1"."person_books" LIMIT 2 args=[War and Peace]
 // returns:
 // => Person(id=5, name=Leo Tolstoy)
+```
+
+or query from author perpective:
+
+```go
+per, err := client.Person.Query().Where(person.HasBooks(), person.Name("Leo Tolstoy")).Only(ctx)
+// code returns:
+// => Person(id=5, name=Leo Tolstoy)
+```
+
+relevant SQL:
+```sql
+SELECT DISTINCT "persons"."id", "persons"."name" FROM "persons" WHERE "persons"."id" IN (SELECT "books"."person_books" FROM "books" WHERE "books"."person_books" IS NOT NULL) AND "persons"."name" = 'Leo Tolstoy' LIMIT 2;
+ id |    name
+----+-------------
+  5 | Leo Tolstoy
+(1 row)
 ```
 
 Tsyren Ochirov (c) 2021

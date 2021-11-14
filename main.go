@@ -9,6 +9,7 @@ import (
 
 	"github.com/Funfun/entgo-example/ent"
 	"github.com/Funfun/entgo-example/ent/book"
+	"github.com/Funfun/entgo-example/ent/person"
 	playerEnt "github.com/Funfun/entgo-example/ent/player"
 	_ "github.com/lib/pq"
 )
@@ -90,4 +91,9 @@ func main() {
 	}
 
 	log.Println("query book's author", author)
+
+	// example query relation using where only
+	per, err := client.Person.Query().Where(person.HasBooks(), person.Name("Leo Tolstoy")).Only(ctx)
+	// SQL: SELECT DISTINCT "persons"."id", "persons"."name" FROM "persons" WHERE "persons"."id" IN (SELECT "books"."person_books" FROM "books" WHERE "books"."person_books" IS NOT NULL) AND "persons"."name" = $1 LIMIT 2 args=[Leo Tolstoy]
+	log.Println("query author with name Leo and has books", per)
 }
