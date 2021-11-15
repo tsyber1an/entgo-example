@@ -223,7 +223,7 @@ func (User) Edges() []ent.Edge {
 ```
 and can be defined as below:
 
-| Relation      | Definition                                              | Syntax                                               |
+| Relation      | Definition by example                                   | Usage syntax                                         |
 |---------------|---------------------------------------------------------|------------------------------------------------------|
 | Has-Many      | `edge.To("games", Game.Type)`                           | (create) `client.User.Create().SetName("john").AddGames(gta, diablo2)` |
 |               |                                                         | (query) `john.QueryGames().All(ctx)` |
