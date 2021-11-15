@@ -11,7 +11,7 @@ type Player struct {
 }
 ```
 
-to turn `Player` mode into an `Ent`'s entity, it is just enough to embed `ent.Schema`, so it becomes:
+to turn `Player` model into an `Ent`'s entity, it is just enough to embed `ent.Schema`, so it becomes:
 
 ```go
 import (
