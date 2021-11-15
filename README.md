@@ -1,7 +1,7 @@
 an intro to Ent
 ---------------
 
-What is Ent. Ent is an entity framework for Go. You cat learn about Ent on https://entgo.io/. This article was written during learning Ent. Most for myself. Hope you will find it useful.
+> What is Ent. Ent is an entity framework for Go. You can learn about Ent on https://entgo.io/. This article was written during learning Ent, for personal use. However, you might find it useful for youself.
 
 We will design ER models and generate Ent entities by example. Let's start.
 Given we have a Player model.
