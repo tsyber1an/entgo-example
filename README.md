@@ -1,4 +1,4 @@
-an intro to Ent
+Intro to Ent
 ---------------
 
 > What is Ent. Ent is an entity framework for Go. You can learn about Ent on https://entgo.io/. This article was written during learning Ent, for personal use. However, you might find it useful for youself.
