@@ -1,7 +1,7 @@
 Intro to Ent
 ---------------
 
-> What is Ent. Ent is an entity framework for Go. You can learn about Ent on https://entgo.io/. This article was written during learning Ent, for personal use. However, you might find it useful for youself.
+> What is Ent. Ent is an entity framework for Go. You can learn about Ent on https://entgo.io/. This article was written during learning Ent, for personal use. However, you might find it useful for yourself.
 
 We will design ER models and generate Ent entities by example. Let's start.
 Given we have a Player model.
@@ -11,7 +11,7 @@ type Player struct {
 }
 ```
 
-to turn `Player` mode into an `Ent`'s entity, it is just enought embed `ent.Schema`, so it becomes:
+to turn `Player` mode into an `Ent`'s entity, it is just enough to embed `ent.Schema`, so it becomes:
 
 ```go
 import (
@@ -22,7 +22,7 @@ type Player struct {
 }
 ```
 
-After we have scheme embed, we will need to define our schema parts such as `Fields`, `Relationships` and, if neccessary, some database specifics like `indexes`.
+After we have the scheme embedded, we will need to define our schema parts such as `Fields`, `Relationships` and, if necessary, some database specifics like `indexes`.
 Let's add some fields to our `Player` entity, e.g. `nickname`, `email` and `scores`:
 
 ```go
@@ -39,13 +39,13 @@ func (Player) Fields() []ent.Field {
 }
 ```
 
-In official introduction of Entgo, it says to init model by running codegeltool. Go ahead and install it first:
+In the official introduction of Entgo, it says to init model by running codegeltool. Go ahead and install it first:
 
 ```bash
 go get entgo.io/ent/cmd/ent
 ```
 
-After you got a tool, time to generate you first template:
+After you got a tool, time to generate your first template:
 ```bash
 go run entgo.io/ent/cmd/ent init Player
 ```
@@ -58,14 +58,14 @@ The `init` command will create a folder `ent` which will contain:
     generate.go
 ```
 
-You will find it has the same structure as we describe in the beginning, plus an aadditional method:
+You will find it has the same structure as we describe in the beginning, plus an additional method:
 ```
 func (Player) Edges() []ent.Edge {
 	return nil
 }
 ```
 
-Now, you can copy your `Field()` method into `./ent/schema/player.go`. To verify that you did all right, run `describe` command, you should get something like bellow:
+Now, you can copy your `Field()` method into `./ent/schema/player.go`. To verify that you did all right, run `describe` command, you should get something like the below:
 ```
 ➜  entgo-example git:(main) go run entgo.io/ent/cmd/ent describe ./ent/schema
 Player:
@@ -80,7 +80,7 @@ Player:
 
 We can remove `./player.go` file, as it is not gonna be needed anymore. From now on, you will edit your models in `./ent/schema` folder.
 
-Now, you migth wonder how do we call SQL queries. To do that, you would need to generate your SQL interfaces for your schema. Invoke the following:
+Now, you might wonder how do we call SQL queries. To do that, you would need to generate your SQL interfaces for your schema. Invoke the following:
 
 Full version:
 ```bash
@@ -92,7 +92,7 @@ Short version:
 go generate ./ent
 ```
 
-Inspect results in `./ent`. Previously, we had there our schame file. Now, there are bunch of files, do not edit them yet. Let's understand their purpose by using it.
+Inspect results in `./ent`. Previously, we had there our scheme file. Now, there are a bunch of files, do not edit them yet. Let's understand their purpose by using it.
 let's pick our `Postgres` as our RDMS engine. Steps are:
 
 Spin up `Postgres` server in docker:
@@ -100,7 +100,7 @@ Spin up `Postgres` server in docker:
 docker run -it --rm --name dev-postgres -e POSTGRES_DB=entgo_example -e POSTGRES_PASSWORD=topsecret -p 5432:5432 postgres
 ```
 
-our connection setttings:
+our connection settings:
 ```
 Host: localhost
 Port: 5432
@@ -118,7 +118,7 @@ import (
 db, err := sql.Open("postgres", "user=postgres password=topsecret dbname=entgo_example sslmode=disable")
 ```
 
-`Ent` provides out of box solution with the same interface:
+`Ent` provides the in-box solution with the same interface:
 ```go
 import (
 	"github.com/Funfun/entgo-example/ent"
@@ -167,7 +167,7 @@ entgo_example=# \dt
 (1 row)
 ```
 
-We moving to next thing. Creating our first entry in our `players` table.
+We moving to the next thing. Creating our first entry in our `players` table.
 
 ```go
 player, err := client.Player.Create().
@@ -182,7 +182,7 @@ if err != nil {
 // 2021/11/14 13:57:57 New player was created Player(id=1, nickname=John, email=info@tsyren.org, scores=1)
 ```
 
-verifing in db:
+verifying in DB:
 ```
 entgo_example=# SELECT * FROM players;
  id | nickname |      email      | scores
@@ -267,7 +267,7 @@ if err != nil {
 // INSERT INTO "books" ("title", "created_at", "person_books") VALUES ($1, $2, $3) RETURNING "id" args=[War and Peace 0001-01-01 00:00:00 +0000 UTC 5]
 ```
 
-note that column that desribes book's author is called `person_books` which might not be really semantically readable for debugging.
+note that the column that describes the book's author is called `person_books` which might not be really semantically readable for debugging.
 
 Query example:
 
