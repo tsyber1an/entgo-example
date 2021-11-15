@@ -143,7 +143,7 @@ COMMIT;
 */
 ```
 
-if that looks good, let's run migrate again our database:
+if that looks good, let's run migration against our database:
 ```go
 if err := client.Schema.Create(context.Background()); err != nil {
 	log.Fatalf("failed creating schema resources: %v", err)
